@@ -1,69 +1,54 @@
-// https://www.naukri.com/code360/problems/prim-s-mst_1095633
+//https://www.naukri.com/code360/problems/minimum-spanning-tree_631769
 
-#include <bits/stdc++.h>
+#include <algorithm>
 
-vector<pair<pair<int, int>, int> >calculatePrimsMST(int n, int m, vector<pair<pair<int, int>, int>> &g){
+bool cmp(vector<int> &a, vector<int> &b) { return a[2] < b[2]; }
 
-  // Write your code here.
-  // create adajancency list
-  unordered_map<int, list<pair<int, int>>> adj;
-  for (int i = 0; i < m; i++){
-    int u = g[i].first.first;
-    int v = g[i].first.second;
-    int w = g[i].second;
-    adj[u].push_back(make_pair(v, w));
-    adj[v].push_back(make_pair(u, w));
+void makeSet(vector<int> &parent, vector<int> &rank, int n) {
+  for (int i = 0; i < n; i++) {
+    parent[i] = i;
+    rank[i] = 0;
   }
-
-  // create 3 data structures which was in this first for key value ds
-  vector<int> key(n + 1); // Distance
-  // second for mst
-  vector<bool> mst(n + 1); // Visited
-  // third for parents
-  vector<int> parents(n + 1); // Parent
-
-  // intialization the value
-  for (int i = 0; i <= n; i++){
-    key[i] = INT_MAX; // in starting put all value as max eg- infinite
-    parents[i] = -1; // mark all value -1
-    mst[i] = false; // mark all value false
-  }
-
-  // let start the algo
-  // initially given test case start with one so source node taken as 1
-  key[1] = 0;
-  parents[1] = -1;
-  
-  for (int i = 1; i < n; i++){
-    int mini = INT_MAX;
-    int u;
-    // find the min value
-    for (int v = 1; v <= n; v++){
-      if (mst[v] == false && key[v] < mini){
-        u = v;
-        mini = key[v];
-      }
-    }
-
-    // mark mst in true
-    mst[u] = true;
-     
-    // find its adjacent node
-    for (auto it : adj[u]){
-      int v = it.first;
-      int w = it.second;
-      if (mst[v] == false && w < key[v]){
-        parents[v] = u;
-        key[v] = w;
-      }
-    }
-  }
-
-  vector<pair<pair<int, int>, int>> ans;
-  for (int i = 2; i <= n; i++){
-    ans.push_back({{parents[i], i}, key[i]});
-  }
-
-  return ans;
 }
 
+int findParent(vector<int> &parent, int node) {
+  if (node == parent[node]) {
+    return node;
+  }
+  return parent[node] = findParent(parent, parent[node]);
+}
+
+void unionSet(int u, int v, vector<int> &parent, vector<int> &rank) {
+  u = findParent(parent, u);
+  v = findParent(parent, v);
+  if (rank[u] < rank[v]) {
+    parent[u] = v;
+  }
+  else if (rank[u] > rank[v]) {
+    parent[v] = u;
+  }
+  else {
+    parent[u] = v;
+    rank[v]++;
+  }
+}
+
+int minimumSpanningTree(vector<vector<int>> &edges, int n) {
+  sort(edges.begin(), edges.end(), cmp);
+  vector<int> parent(n), rank(n);
+  makeSet(parent, rank, n);
+
+  int minWeight = 0;
+
+  for (int i = 0; i < edges.size(); i++) {
+    int u = findParent(parent, edges[i][0]);
+    int v = findParent(parent, edges[i][1]);
+    int w = edges[i][2];
+    if (u != v) {
+      minWeight += w;
+      unionSet(u, v, parent, rank);
+    }
+  }
+
+  return minWeight;
+}
