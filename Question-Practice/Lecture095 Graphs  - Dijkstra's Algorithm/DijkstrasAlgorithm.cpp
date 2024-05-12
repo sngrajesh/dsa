@@ -19,8 +19,8 @@ vector<int> dijkstra(vector<vector<int>> &vec, int vertices, int edges, int sour
     for(int i = 0 ; i < vertices ; i++)
         distance[i] = INT_MAX;
 
-    set<pair<int, int> >st;
     distance[source] = 0;
+    set<pair<int, int> >st;
     st.insert({0,source}); // make_pair(0,0)
 
     while(!st.empty()){
@@ -48,7 +48,6 @@ vector<int> dijkstra(vector<vector<int>> &vec, int vertices, int edges, int sour
 
 
 
-
 /*
     Time complexity: O(E*log(V))
     Space complexity: O(V^2)
@@ -56,6 +55,7 @@ vector<int> dijkstra(vector<vector<int>> &vec, int vertices, int edges, int sour
     Where 'E' is the number of edges and 'V' is
     the number of vertices in a graph.
 */
+/*
 #include <bits/stdc++.h> 
 
 class Compare
@@ -111,4 +111,4 @@ vector<int> dijkstra(vector<vector<int>> &vec, int vertices, int edges, int sour
     }
     return distance;
 }
-
+*/
