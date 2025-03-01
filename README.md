@@ -1,4 +1,4 @@
-# C++ Topics Tree Structure
+# C++ Topics 
 
 ## 1. Introduction to C++
     - History of C++
