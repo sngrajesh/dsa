@@ -1,3 +1,5 @@
+// https://leetcode.com/problems/find-first-and-last-position-of-element-in-sorted-array/
+
 #include<vector>
 using namespace std;
 int firstOcc(vector<int>& arr, int n, int key) {
